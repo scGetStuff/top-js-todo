@@ -2,12 +2,11 @@
     "name": "todo",
     "version": "1.0.0",
     "description": "The Odin Project, Full Stack JavaScript Path, JavaScript, Organizing your JavaScript Code, Project: Todo List",
-    "main": "index.js",
     "private": true,
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack",
-        "watch": "webpack --watch"
+        "build": "webpack --mode production",
+        "server": "webpack serve --mode development"
     },
     "repository": {
         "type": "git",
@@ -21,9 +20,16 @@
     },
     "homepage": "https://github.com/scGetStuff/top-js-todo#readme",
     "devDependencies": {
+        "@babel/core": "^7.18.10",
+        "@babel/preset-env": "^7.18.10",
+        "babel-loader": "^8.2.5",
+        "css-loader": "^6.7.1",
         "eslint": "^8.20.0",
+        "html-webpack-plugin": "^5.5.0",
         "prettier": "2.7.1",
+        "style-loader": "^3.3.1",
         "webpack": "^5.73.0",
-        "webpack-cli": "^4.10.0"
+        "webpack-cli": "^4.10.0",
+        "webpack-dev-server": "^4.9.3"
     }
 }
