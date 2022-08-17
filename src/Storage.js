@@ -2,15 +2,26 @@ import { User } from "./User";
 import { TodoList } from "./TodoList";
 import { TodoItem } from "./TodoItem";
 
+const DEFAULT_NAME = "default";
+
 class Storage {
-    static deleteStorage() {
+
+    // TODO: hack 
+    // i want seperate layers, but i need the data to render the UI
+    // events need to load data then render table
+    // so need a referance somewhere, don't want global namespace crap in app.js
+    static currentUser = null;
+
+    // TODO: i fucking despise javascript; have to use 'this' to referance other static method/prop
+    static delete() {
         localStorage.clear();
+        this.currentUser = null;
     }
 
     static default() {
-        Storage.deleteStorage();
+        Storage.delete();
 
-        const user = new User("default");
+        const user = new User(DEFAULT_NAME);
 
         let list = user.createList("one");
         list.createItem("item 1");
@@ -25,21 +36,17 @@ class Storage {
         list.createItem("item 6");
         list.createItem("item 7");
 
-        Storage.saveUser(user);
-
+        this.currentUser = user;
+        Storage.saveUser();
+        
         return user;
     }
 
-    static loadUser(name) {
-        return this.fromJSON(localStorage.getItem(name));
-    }
-
-    // TODO: should be private
     // TODO: this is crap; tightly coupled with class structure
-    // private fields don't seralize to json, just keeping it simpler and going all public
     // i was wasting too much time this, just fall back to brute force shit so i can move on
-    static fromJSON(jsonString) {
-        const userObject = JSON.parse(jsonString);
+    //TODO: name is not implimented yet
+    static loadUser(name = DEFAULT_NAME) {
+        const userObject = JSON.parse(localStorage.getItem(name));
         const user = new User(userObject.name);
 
         userObject.lists.forEach((list) => {
@@ -49,11 +56,13 @@ class Storage {
             });
         });
 
+        this.currentUser = user;
         return user;
     }
 
-    static saveUser(user) {
-        localStorage.setItem(user.name, JSON.stringify(user));
+    static saveUser() {
+        localStorage.setItem(this.currentUser.name, JSON.stringify(this.currentUser));
+        // console.log(localStorage);
     }
 }
 

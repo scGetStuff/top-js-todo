@@ -93,6 +93,10 @@ footer {
     padding: 0.25rem 0.5rem;
 }
 
+.group button:hover {
+    background-color: green;
+}
+
 select {
     color: var(--clr-txt);
     cursor: pointer;
