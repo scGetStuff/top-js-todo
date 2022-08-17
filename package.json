@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack --mode production",
-        "server": "webpack serve --mode development"
+        "server": "webpack serve --mode development",
+        "watch": "webpack --watch --mode production"
     },
     "repository": {
         "type": "git",
