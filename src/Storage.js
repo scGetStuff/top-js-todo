@@ -4,18 +4,22 @@ import { TodoItem } from "./TodoItem";
 
 const DEFAULT_NAME = "default";
 
+// TODO: i don't know which is better, using 'Class' vs 'this'
+// i think referancing static members using 'this' is fucking retarded, 
+// so i'm making a bunch of 'Storage' referances to my own static members
 class Storage {
 
-    // TODO: hack 
-    // i want seperate layers, but i need the data to render the UI
-    // events need to load data then render table
-    // so need a referance somewhere, don't want global namespace crap in app.js
+    // TODO: hack
+    // i want seperate layers; ui, data, io.
+    // but i need the user object for rendering, load/save events
+    // i can't pass a user object to an event, so i need a referance somewhere
+    // so this kind of makes sense because default() builds the user
+    // but new/edit/delete functions will also need the user, so it probably should just be global in app.js
     static currentUser = null;
 
-    // TODO: i fucking despise javascript; have to use 'this' to referance other static method/prop
     static delete() {
         localStorage.clear();
-        this.currentUser = null;
+        Storage.currentUser = null;
     }
 
     static default() {
@@ -36,32 +40,37 @@ class Storage {
         list.createItem("item 6");
         list.createItem("item 7");
 
-        this.currentUser = user;
+        Storage.currentUser = user;
+
         Storage.saveUser();
-        
-        return user;
     }
 
     // TODO: this is crap; tightly coupled with class structure
-    // i was wasting too much time this, just fall back to brute force shit so i can move on
+    // i was wasting too much time, just fall back to brute force shit so i can move on
     //TODO: name is not implimented yet
     static loadUser(name = DEFAULT_NAME) {
-        const userObject = JSON.parse(localStorage.getItem(name));
-        const user = new User(userObject.name);
+        const jsonString = localStorage.getItem(name);
+        if (!jsonString) return;
 
-        userObject.lists.forEach((list) => {
+        const userState = JSON.parse(jsonString);
+        const user = new User(userState.name);
+
+        userState.lists.forEach((list) => {
             const todoList = user.createList(list.name);
             list.items.forEach((item) => {
                 const todoItem = todoList.createItem(item.name);
             });
         });
 
-        this.currentUser = user;
-        return user;
+        Storage.currentUser = user;
     }
 
     static saveUser() {
-        localStorage.setItem(this.currentUser.name, JSON.stringify(this.currentUser));
+        if (!Storage.currentUser) return;
+        localStorage.setItem(
+            Storage.currentUser.name,
+            JSON.stringify(Storage.currentUser)
+        );
         // console.log(localStorage);
     }
 }

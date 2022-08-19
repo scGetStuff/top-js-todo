@@ -113,3 +113,40 @@ option {
 ul {
     margin-left: 1rem;
 }
+
+
+dialog {
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    padding: 1rem;
+    background-color: var(--clr-secondary);
+    color: var(--clr-txt);
+    border: 5px solid var(--clr-txt);
+}
+
+dialog div {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid red;
+}
+
+dialog form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem
+}
+
+dialog button {
+    display: block;
+    grid-column: 1/-1;
+}
+
+
+

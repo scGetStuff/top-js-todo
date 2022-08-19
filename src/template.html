@@ -14,16 +14,13 @@
 
         <main>
             <div class="left">
-                
                 <label for="todoLists">Your Lists:</label>
-                <select name="todoLists" id="todoLists" size="10">
-                </select>
+                <select name="todoLists" id="todoLists" size="10"></select>
 
                 <fieldset class="group">
                     <legend>List management functions</legend>
-                    <button type="button">New</button>
-                    <button type="button">Delete</button>
-                    <button type="button">New Task</button>
+                    <button type="button" id="listNew">New</button>
+                    <button type="button" id="listDelete">Delete</button>
                 </fieldset>
 
                 <fieldset class="group">
@@ -39,19 +36,28 @@
                 <p>headers should be links that sort alternate asc/des</p>
                 <p>for each row:</p>
                 <ul>
-                    <li>description should link to a modal with the full description to read/edit</li>
-                    <li>check box for disable/mark done, set a flag to exclude from sort</li>
+                    <li>
+                        description should link to a modal with the full
+                        description to read/edit
+                    </li>
+                    <li>
+                        check box for disable/mark done, set a flag to exclude
+                        from sort
+                    </li>
                     <li>delet use red X button to delete the task</li>
-                    <li>should probably have add task button on the table side, not on the left</li>
-
+                    <li>
+                        should probably have add task button on the table side,
+                        not on the left
+                    </li>
                 </ul>
                 <table>
-                    <caption>List Name goes here on list load</caption>
+                    <caption>
+                        List Name goes here on list load
+                    </caption>
                     <thead>
                         <tr>
                             <th>Check</th>
                             <th>Name</th>
-
 
                             <th>Delete</th>
                         </tr>
@@ -65,5 +71,16 @@
         <footer>
             <h3>Footer</h3>
         </footer>
+
+        <dialog id="newListDialog">
+            <div>
+                <h2>New list dialog</h2>
+                <form method="dialog" id="newListForm">
+                    <label for="listName">name:</label>
+                    <input type="text" id="listName" name="listName" />
+                    <button>OK</button>
+                </form>
+            </div>
+        </dialog>
     </body>
 </html>
