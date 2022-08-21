@@ -7,8 +7,8 @@ class DOMStuff {
         bindButton("storageDefault", Storage.default, DOMStuff.renderUser);
         bindButton("storageDelete", Storage.delete, DOMStuff.renderUser);
 
-        bindButton("listNew", newList, DOMStuff.renderUser);
-        bindButton("listDelete", newList, DOMStuff.renderUser);
+        bindButton("listNew", showNewListForm, DOMStuff.renderUser);
+        bindButton("listDelete", deletList, DOMStuff.renderUser);
 
         document.getElementById("newListForm").addEventListener("submit", addNewList);
 
@@ -30,21 +30,23 @@ class DOMStuff {
             todoLists.removeChild(todoLists.firstChild);
         if (!Storage.currentUser) return;
 
-        Storage.currentUser.lists.forEach((list) => {
+        Storage.currentUser.lists.forEach((list, index) => {
             const opt = document.createElement("option");
-            opt.value = list.name;
-            opt.innerText = list.name;
+            opt.value = index;
+            opt.label = list.name;
             todoLists.appendChild(opt);
         });
+        todoLists.selectedIndex = -1;
     }
 
 }
 
 // TODO: i guess i got sick of js class crap and started writing regular code
-const newlistName = document.getElementById("listName");
+const newlistName = document.getElementById("newlistName");
+const todoLists = document.getElementById("todoLists");
 
-// TODO: not sure dialog works for moble, but i am sure i don't give a fuck about moble
-function newList() {
+// TODO: not sure dialog works for moble
+function showNewListForm() {
     newlistName.value = "";
     document.getElementById("newListDialog").showModal();
 }
@@ -55,7 +57,8 @@ function addNewList() {
 }
 
 function deletList() {
-    alert("delete");
+    if (todoLists.selectedIndex === -1) return;
+    Storage.currentUser.deleteList(todoLists.value);
 }
 
 export { DOMStuff };

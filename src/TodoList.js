@@ -1,10 +1,7 @@
 import { TodoItem } from "./TodoItem";
 
 class TodoList {
-    constructor(id, name) {
-        // unique, required
-        this.id = id;
-        // unique, required
+    constructor(name) {
         this.name = name;
     }
 
@@ -13,16 +10,14 @@ class TodoList {
     description = null;
 
     createItem(name) {
-        // TODO: change to hashmap and do something better with id
-        const id = this.items.length + 1;
-        const item = new TodoItem(id, name);
+        const item = new TodoItem(name);
         this.items.push(item);
         return item;
     }
 
     deleteItem(id) {
         this.items.splice(id, 1);
-        return items;
+        return this.items;
     }
 
     // should not effect the user specified order, just a display thing
