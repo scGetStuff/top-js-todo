@@ -108,7 +108,7 @@ ul {
     margin-left: 1rem;
 }
 
-dialog {
+.new-list-dialog {
     top: 40%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
@@ -118,7 +118,7 @@ dialog {
     border: 5px solid var(--clr-txt);
 }
 
-.because-changing-dialog-display-makes-it-visible-on-load {
+.dialog-content {
     width: 100%;
     height: 100%;
     padding: 1rem;
@@ -127,15 +127,15 @@ dialog {
     justify-items: center;
     align-items: center;
     gap: 1rem;
- }
-
-dialog form {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1rem
 }
 
-dialog button {
+.new-list-dialog form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+}
+
+.new-list-dialog button {
     display: block;
     grid-column: 1/-1;
 }
@@ -155,7 +155,8 @@ tbody tr:nth-child(odd) {
     background-color: var(--clr-primary);
 }
 
-td, th {
+td,
+th {
     border: 1px solid black;
     text-align: center;
     padding: 0.5rem;

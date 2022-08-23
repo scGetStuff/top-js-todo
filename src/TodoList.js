@@ -20,12 +20,10 @@ class TodoList {
         return this.items;
     }
 
-    // should not effect the user specified order, just a display thing
     sortByDate() {
         return undefined;
     }
 
-    // should not effect the user specified order, just a display thing
     sortByPriority() {
         return undefined;
     }

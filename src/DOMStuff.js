@@ -5,7 +5,6 @@ const todoLists = document.getElementById("todoLists");
 const rows = document.getElementById("rows");
 const tableHeading = document.getElementById("tableHeading");
 
-
 function bind() {
     bindButton("storageLoad", Storage.loadUser, renderLists);
     bindButton("storageSave", Storage.saveUser);
@@ -19,23 +18,20 @@ function bind() {
         .getElementById("newListForm")
         .addEventListener("submit", addNewList);
 
-    todoLists.addEventListener("change", listSelected);
+    todoLists.addEventListener("change", renderTable);
 
     function bindButton(buttonID, action, render = null) {
         document.getElementById(buttonID).addEventListener("click", (event) => {
             action();
-            if (render)
-                render();
+            if (render) render();
         });
     }
 }
 
 function renderLists() {
-    // always clear the display before render
-    rows.innerHTML = '';
-    tableHeading.innerHTML = '&nbsp;'; // keep screen from shifting
-    while (todoLists.firstChild) todoLists.removeChild(todoLists.firstChild);
-    //but delete does not need to build anything, so bail
+    clearUI();
+
+    // delete does not need to build anything, so bail
     if (!Storage.currentUser) return;
 
     Storage.currentUser.lists.forEach((list, index) => {
@@ -44,7 +40,14 @@ function renderLists() {
         opt.label = list.name;
         todoLists.appendChild(opt);
     });
-    todoLists.selectedIndex = -1;
+
+    function clearUI() {
+        rows.innerHTML = "";
+        tableHeading.innerHTML = "&nbsp;"; // keep screen from shifting
+        todoLists.selectedIndex = -1;
+        while (todoLists.firstChild)
+            todoLists.removeChild(todoLists.firstChild);
+    }
 }
 
 // TODO: not sure dialog works for moble
@@ -58,37 +61,34 @@ function addNewList() {
     renderLists();
     // fake click on the new item, it will be last
     todoLists.selectedIndex = todoLists.children.length - 1;
-    todoLists.dispatchEvent(new Event('change'));
+    todoLists.dispatchEvent(new Event("change"));
 }
 
 function deletList() {
     if (todoLists.selectedIndex === -1) return;
+    // TODO: only works because i stuck the array index into the option value
     Storage.currentUser.deleteList(todoLists.value);
 }
 
-function listSelected() {
+function renderTable() {
     // TODO: thight coupling between data array and UI list
     const todoList = Storage.currentUser.lists[todoLists.selectedIndex];
-    renderTable(todoList);
-}
-
-function renderTable(todoList) {
     tableHeading.innerText = todoList.name;
     renderRows(todoList.items);
 }
 
-function renderRows(todoItems){
-    let html = '';
+function renderRows(todoItems) {
+    let html = "";
     todoItems.forEach((todoItem) => {
         html += createRow(todoItem);
     });
     rows.innerHTML = html;
-}
 
-function createRow(todoItem) {
-    // TODO: first pass dummy data
-    // TODO: still not sure innerHTML is good/bad; less code than stupid DOM crap
-    return `<tr><td>false</td><td>${todoItem.name}</td><td>X</td></tr>`;
+    function createRow(todoItem) {
+        // TODO: first pass dummy data
+        // TODO: still not sure innerHTML is good/bad; less code than stupid DOM crap
+        return `<tr><td>false</td><td>${todoItem.name}</td><td>X</td></tr>`;
+    }
 }
 
 export { bind };

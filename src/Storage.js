@@ -5,10 +5,9 @@ import { TodoItem } from "./TodoItem";
 const DEFAULT_NAME = "default";
 
 // TODO: i don't know which is better, using 'Class' vs 'this'
-// i think referancing static members using 'this' is fucking retarded, 
+// i think referancing static members using 'this' is fucking retarded,
 // so i'm making a bunch of 'Storage' referances to my own static members
 class Storage {
-
     // TODO: hack
     // i want seperate layers; ui, data, io.
     // but i need the user object for rendering, load/save events

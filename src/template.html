@@ -33,7 +33,6 @@
             </div>
             <div class="right">
                 <h2>Tasks Table</h2>
-                <p>headers should be links that sort alternate asc/des</p>
                 <p>for each row:</p>
                 <ul>
                     <li>
@@ -51,7 +50,9 @@
                     </li>
                 </ul>
                 <table>
-                    <caption id="tableHeading">&nbsp;</caption>
+                    <caption id="tableHeading">
+                        &nbsp;
+                    </caption>
                     <thead>
                         <tr>
                             <th>Check</th>
@@ -69,8 +70,8 @@
             <h3>Footer</h3>
         </footer>
 
-        <dialog id="newListDialog">
-            <div class="because-changing-dialog-display-makes-it-visible-on-load">
+        <dialog class="new-list-dialog" id="newListDialog">
+            <div class="dialog-content">
                 <h2>New list dialog</h2>
                 <form method="dialog" id="newListForm">
                     <label for="newlistName">name:</label>
