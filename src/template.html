@@ -51,18 +51,15 @@
                     </li>
                 </ul>
                 <table>
-                    <caption>
-                        List Name goes here on list load
-                    </caption>
+                    <caption id="tableHeading">&nbsp;</caption>
                     <thead>
                         <tr>
                             <th>Check</th>
                             <th>Name</th>
-
                             <th>Delete</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="rows"></tbody>
                     <tfoot></tfoot>
                 </table>
             </div>
@@ -73,7 +70,7 @@
         </footer>
 
         <dialog id="newListDialog">
-            <div>
+            <div class="because-changing-dialog-display-makes-it-visible-on-load">
                 <h2>New list dialog</h2>
                 <form method="dialog" id="newListForm">
                     <label for="newlistName">name:</label>

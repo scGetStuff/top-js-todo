@@ -1,49 +1,51 @@
 import { Storage } from "./Storage";
 
-class DOMStuff {
-    static bind() {
-        bindButton("storageLoad", Storage.loadUser, DOMStuff.renderUser);
-        bindButton("storageSave", Storage.saveUser, DOMStuff.renderUser);
-        bindButton("storageDefault", Storage.default, DOMStuff.renderUser);
-        bindButton("storageDelete", Storage.delete, DOMStuff.renderUser);
-
-        bindButton("listNew", showNewListForm, DOMStuff.renderUser);
-        bindButton("listDelete", deletList, DOMStuff.renderUser);
-
-        document.getElementById("newListForm").addEventListener("submit", addNewList);
-
-        function bindButton(buttonID, action, render) {
-            document
-                .getElementById(buttonID)
-                .addEventListener("click", (event) => {
-                    action();
-                    render();
-                });
-        }
-    }
-
-    static renderUser() {
-        const todoLists = document.getElementById("todoLists");
-
-        // always clear the display, but delete does not need to build anything
-        while (todoLists.firstChild)
-            todoLists.removeChild(todoLists.firstChild);
-        if (!Storage.currentUser) return;
-
-        Storage.currentUser.lists.forEach((list, index) => {
-            const opt = document.createElement("option");
-            opt.value = index;
-            opt.label = list.name;
-            todoLists.appendChild(opt);
-        });
-        todoLists.selectedIndex = -1;
-    }
-
-}
-
-// TODO: i guess i got sick of js class crap and started writing regular code
 const newlistName = document.getElementById("newlistName");
 const todoLists = document.getElementById("todoLists");
+const rows = document.getElementById("rows");
+const tableHeading = document.getElementById("tableHeading");
+
+
+function bind() {
+    bindButton("storageLoad", Storage.loadUser, renderLists);
+    bindButton("storageSave", Storage.saveUser);
+    bindButton("storageDefault", Storage.default, renderLists);
+    bindButton("storageDelete", Storage.delete, renderLists);
+
+    bindButton("listNew", showNewListForm, renderLists);
+    bindButton("listDelete", deletList, renderLists);
+
+    document
+        .getElementById("newListForm")
+        .addEventListener("submit", addNewList);
+
+    todoLists.addEventListener("change", listSelected);
+
+    function bindButton(buttonID, action, render = null) {
+        document.getElementById(buttonID).addEventListener("click", (event) => {
+            action();
+            if (render)
+                render();
+        });
+    }
+}
+
+function renderLists() {
+    // always clear the display before render
+    rows.innerHTML = '';
+    tableHeading.innerHTML = '&nbsp;'; // keep screen from shifting
+    while (todoLists.firstChild) todoLists.removeChild(todoLists.firstChild);
+    //but delete does not need to build anything, so bail
+    if (!Storage.currentUser) return;
+
+    Storage.currentUser.lists.forEach((list, index) => {
+        const opt = document.createElement("option");
+        opt.value = index;
+        opt.label = list.name;
+        todoLists.appendChild(opt);
+    });
+    todoLists.selectedIndex = -1;
+}
 
 // TODO: not sure dialog works for moble
 function showNewListForm() {
@@ -53,7 +55,10 @@ function showNewListForm() {
 
 function addNewList() {
     Storage.currentUser.createList(newlistName.value);
-    DOMStuff.renderUser();
+    renderLists();
+    // fake click on the new item, it will be last
+    todoLists.selectedIndex = todoLists.children.length - 1;
+    todoLists.dispatchEvent(new Event('change'));
 }
 
 function deletList() {
@@ -61,4 +66,29 @@ function deletList() {
     Storage.currentUser.deleteList(todoLists.value);
 }
 
-export { DOMStuff };
+function listSelected() {
+    // TODO: thight coupling between data array and UI list
+    const todoList = Storage.currentUser.lists[todoLists.selectedIndex];
+    renderTable(todoList);
+}
+
+function renderTable(todoList) {
+    tableHeading.innerText = todoList.name;
+    renderRows(todoList.items);
+}
+
+function renderRows(todoItems){
+    let html = '';
+    todoItems.forEach((todoItem) => {
+        html += createRow(todoItem);
+    });
+    rows.innerHTML = html;
+}
+
+function createRow(todoItem) {
+    // TODO: first pass dummy data
+    // TODO: still not sure innerHTML is good/bad; less code than stupid DOM crap
+    return `<tr><td>false</td><td>${todoItem.name}</td><td>X</td></tr>`;
+}
+
+export { bind };

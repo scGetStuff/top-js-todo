@@ -49,13 +49,6 @@ caption,
     background-color: var(--clr-secondary);
 }
 
-caption {
-    padding: 0.5rem;
-    border-bottom: 1px solid black;
-    font-size: larger;
-    text-align: start;
-}
-
 header,
 footer {
     text-align: center;
@@ -93,7 +86,8 @@ footer {
     padding: 0.25rem 0.5rem;
 }
 
-.group button:hover {
+.group button:hover,
+.group button:focus {
     background-color: green;
 }
 
@@ -114,7 +108,6 @@ ul {
     margin-left: 1rem;
 }
 
-
 dialog {
     top: 40%;
     left: 50%;
@@ -125,7 +118,7 @@ dialog {
     border: 5px solid var(--clr-txt);
 }
 
-dialog div {
+.because-changing-dialog-display-makes-it-visible-on-load {
     width: 100%;
     height: 100%;
     padding: 1rem;
@@ -134,8 +127,7 @@ dialog div {
     justify-items: center;
     align-items: center;
     gap: 1rem;
-    border: 1px solid red;
-}
+ }
 
 dialog form {
     display: grid;
@@ -148,5 +140,23 @@ dialog button {
     grid-column: 1/-1;
 }
 
+table {
+    border-collapse: collapse;
+}
 
+caption {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: larger;
+    font-weight: bold;
+}
 
+tbody tr:nth-child(odd) {
+    background-color: var(--clr-primary);
+}
+
+td, th {
+    border: 1px solid black;
+    text-align: center;
+    padding: 0.5rem;
+}

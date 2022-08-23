@@ -20,7 +20,12 @@ just get basic lists and items working with just names, all ui elements, events,
 ### Notes
 - Personal preferance with ess6 modules, i hate the existance of defaults, i do not use them.
 - JSON.stringify() only writes out public fields, kind of makes seralizing class with private fields a problem.  i don't want to deal with other libraries for seralizing, just keeping it simpler and going all public.
-
+- Namespace thing; I started with static methods, then switched back to regular functions.
+    ```js
+        // my prefered aproach is to always qualify code from other modules
+        import * as DOMStuff from "./DOMStuff";
+        DOMStuff.bind();
+    ```
 
 ### other features maybe add
 - add the ability to create a user
