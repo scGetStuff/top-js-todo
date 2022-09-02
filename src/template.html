@@ -49,20 +49,23 @@
                         not on the left
                     </li>
                 </ul>
-                <table>
-                    <caption id="tableHeading">
-                        &nbsp;
-                    </caption>
-                    <thead>
-                        <tr>
-                            <th>Check</th>
-                            <th>Name</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rows"></tbody>
-                    <tfoot></tfoot>
-                </table>
+                <div class="flex-row">
+                    <table>
+                        <caption id="tableHeading">
+                            &nbsp;
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th>Check</th>
+                                <th>Name</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rows"></tbody>
+                        <tfoot></tfoot>
+                    </table>
+                    <button type="button" id="taskNew">Add Task</button>
+                </div>
             </div>
         </main>
 
@@ -72,10 +75,33 @@
 
         <dialog class="new-list-dialog" id="newListDialog">
             <div class="dialog-content">
-                <h2>New list dialog</h2>
+                <h2>New List Dialog</h2>
                 <form method="dialog" id="newListForm">
-                    <label for="newlistName">name:</label>
-                    <input type="text" id="newlistName" name="newlistName" />
+                    <div>
+                        <label for="newListName">name:</label>
+                        <input
+                            type="text"
+                            id="newListName"
+                            name="newListName"
+                        />
+                    </div>
+                    <button>OK</button>
+                </form>
+            </div>
+        </dialog>
+
+        <dialog class="new-task-dialog" id="newTaskDialog">
+            <div class="dialog-content">
+                <h2>New Task Dialog</h2>
+                <form method="dialog" id="newTaskForm">
+                    <div>
+                        <label for="newTaskName">name:</label>
+                        <input
+                            type="text"
+                            id="newTaskName"
+                            name="newTaskName"
+                        />
+                    </div>
                     <button>OK</button>
                 </form>
             </div>

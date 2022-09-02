@@ -1,9 +1,15 @@
 import { Storage } from "./Storage";
+import { User } from "./User";
+import { TodoList } from "./TodoList";
+import { TodoItem } from "./TodoItem";
 
-const newlistName = document.getElementById("newlistName");
 const todoLists = document.getElementById("todoLists");
 const rows = document.getElementById("rows");
 const tableHeading = document.getElementById("tableHeading");
+const newListName = document.getElementById("newListName");
+const newListDialog = document.getElementById("newListDialog");
+const newTaskName = document.getElementById("newTaskName");
+const newTaskDialog = document.getElementById("newTaskDialog");
 
 function bind() {
     bindButton("storageLoad", Storage.loadUser, renderLists);
@@ -14,9 +20,10 @@ function bind() {
     bindButton("listNew", showNewListForm, renderLists);
     bindButton("listDelete", deletList, renderLists);
 
-    document
-        .getElementById("newListForm")
-        .addEventListener("submit", addNewList);
+    bindButton("taskNew", showNewTaskForm, renderTable);
+
+    document.getElementById("newListForm").addEventListener("submit", addList);
+    document.getElementById("newTaskForm").addEventListener("submit", addTask);
 
     todoLists.addEventListener("change", renderTable);
 
@@ -52,16 +59,30 @@ function renderLists() {
 
 // TODO: not sure dialog works for moble
 function showNewListForm() {
-    newlistName.value = "";
-    document.getElementById("newListDialog").showModal();
+    newListName.value = "";
+    newListDialog.showModal();
 }
 
-function addNewList() {
-    Storage.currentUser.createList(newlistName.value);
+function addList() {
+    const name = newListName.value.trim();
+    if (name === "") return;
+    Storage.currentUser.createList(name);
     renderLists();
     // fake click on the new item, it will be last
     todoLists.selectedIndex = todoLists.children.length - 1;
     todoLists.dispatchEvent(new Event("change"));
+}
+
+function showNewTaskForm() {
+    newTaskName.value = "";
+    newTaskDialog.showModal();
+}
+
+function addTask() {
+    const name = newTaskName.value.trim();
+    if (name === "") return;
+    Storage.currentUser.getList(todoLists.selectedIndex).createItem(name);
+    renderTable();
 }
 
 function deletList() {
