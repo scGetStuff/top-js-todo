@@ -56,9 +56,10 @@
                         </caption>
                         <thead>
                             <tr>
-                                <th>Check</th>
+                                <th></th>
                                 <th>Name</th>
-                                <th>Delete</th>
+                                <th>Description</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="rows"></tbody>
@@ -77,15 +78,15 @@
             <div class="dialog-content">
                 <h2>New List Dialog</h2>
                 <form method="dialog" id="newListForm">
-                    <div>
-                        <label for="newListName">name:</label>
+                    <div class="field">
+                        <label for="newListName">Name:</label>
                         <input
                             type="text"
                             id="newListName"
                             name="newListName"
                         />
                     </div>
-                    <button>OK</button>
+                    <button class="ok">OK</button>
                 </form>
             </div>
         </dialog>
@@ -94,15 +95,24 @@
             <div class="dialog-content">
                 <h2>New Task Dialog</h2>
                 <form method="dialog" id="newTaskForm">
-                    <div>
-                        <label for="newTaskName">name:</label>
+                    <div class="field">
+                        <label for="newTaskName">Name:</label>
                         <input
                             type="text"
                             id="newTaskName"
                             name="newTaskName"
                         />
                     </div>
-                    <button>OK</button>
+                    <div class="field">
+                        <label for="newTaskDescription">Description:</label>
+                        <textarea
+                            id="newTaskDescription"
+                            name="newTaskDescription"
+                            rows="5"
+                            cols="45"
+                        ></textarea>
+                    </div>
+                    <button class="ok">OK</button>
                 </form>
             </div>
         </dialog>

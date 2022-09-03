@@ -10,6 +10,7 @@ const newListName = document.getElementById("newListName");
 const newListDialog = document.getElementById("newListDialog");
 const newTaskName = document.getElementById("newTaskName");
 const newTaskDialog = document.getElementById("newTaskDialog");
+const newTaskDescription = document.getElementById("newTaskDescription");
 
 function bind() {
     bindButton("storageLoad", Storage.loadUser, renderLists);
@@ -81,7 +82,11 @@ function showNewTaskForm() {
 function addTask() {
     const name = newTaskName.value.trim();
     if (name === "") return;
-    Storage.currentUser.getList(todoLists.selectedIndex).createItem(name);
+    const todoItem = Storage.currentUser
+        .getList(todoLists.selectedIndex)
+        .createItem(name);
+    todoItem.description = newTaskDescription.value.trim();
+    console.log(todoItem.description);
     renderTable();
 }
 
@@ -107,8 +112,8 @@ function renderRows(todoItems) {
 
     function createRow(todoItem) {
         // TODO: first pass dummy data
-        // TODO: still not sure innerHTML is good/bad; less code than stupid DOM crap
-        return `<tr><td>false</td><td>${todoItem.name}</td><td>X</td></tr>`;
+        // TODO: still not sure innerHTML is good/bad; it is less code than stupid DOM crap
+        return `<tr><td>${todoItem.isDone}</td><td>${todoItem.name}</td><td>${todoItem.description}</td><td>X</td></tr>`;
     }
 }
 
