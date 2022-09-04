@@ -7,3 +7,4 @@ import * as DOMStuff from "./DOMStuff";
 
 console.clear();
 DOMStuff.bind();
+DOMStuff.fakeButtonClick("storageLoad");

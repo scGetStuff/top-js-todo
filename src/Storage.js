@@ -16,40 +16,50 @@ class Storage {
     // but new/edit/delete functions will also need the user, so it probably should just be global in app.js
     static currentUser = null;
 
-    static delete() {
+    static clear() {
         localStorage.clear();
         Storage.currentUser = null;
     }
 
-    static default() {
-        Storage.delete();
-
-        const user = new User(DEFAULT_NAME);
-
-        let list = user.createList("one");
-        list.createItem("item 1");
-        list.createItem("item 2");
-
-        list = user.createList("two");
-        list.createItem("item 3");
-        list.createItem("item 4");
-        list.createItem("item 5");
-
-        list = user.createList("three");
-        list.createItem("item 6");
-        list.createItem("item 7");
-
-        Storage.currentUser = user;
-
+    static createDefaultUser(cb) {
+        Storage.clear();
+        Storage.currentUser = new User(DEFAULT_NAME);
+        if (cb) cb();
         Storage.saveUser();
     }
 
-    // TODO: this is crap; tightly coupled with class structure
-    // i was wasting too much time, just fall back to brute force shit so i can move on
-    //TODO: name is not implimented yet
+    static createDefaultList() {
+        Storage.createDefaultUser(() =>
+            Storage.currentUser.createList("Default")
+        );
+    }
+
+    static createDefaultData() {
+        Storage.createDefaultUser(() => {
+            let list = Storage.currentUser.createList("one");
+            list.createItem("item 1");
+            list.createItem("item 2");
+
+            list = Storage.currentUser.createList("two");
+            list.createItem("item 3");
+            list.createItem("item 4");
+            list.createItem("item 5");
+
+            list = Storage.currentUser.createList("three");
+            list.createItem("item 6");
+            list.createItem("item 7");
+        });
+    }
+
+    // TODO: javascript seralizing objects sucks, this is what i'm stuck with
+    // TODO: name is not implimented yet
     static loadUser(name = DEFAULT_NAME) {
-        const jsonString = localStorage.getItem(name);
-        if (!jsonString) return;
+        let jsonString = localStorage.getItem(name);
+        // handle empty storage with default
+        if (!jsonString) {
+            Storage.createDefaultUser();
+            jsonString = localStorage.getItem(name);
+        }
 
         const userState = JSON.parse(jsonString);
         const user = new User(userState.name);

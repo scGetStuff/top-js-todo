@@ -15,16 +15,15 @@ const newTaskDescription = document.getElementById("newTaskDescription");
 function bind() {
     bindButton("storageLoad", Storage.loadUser, renderLists);
     bindButton("storageSave", Storage.saveUser);
-    bindButton("storageDefault", Storage.default, renderLists);
-    bindButton("storageDelete", Storage.delete, renderLists);
+    bindButton("storageDefault", Storage.createDefaultData, renderLists);
+    bindButton("storageClear", Storage.clear, clearUI);
+    bindButton("listDelete", deletSelectedList, renderLists);
 
-    bindButton("listNew", showNewListForm, renderLists);
-    bindButton("listDelete", deletList, renderLists);
-
-    bindButton("taskNew", showNewTaskForm, renderTable);
-
+    bindButton("listNew", showNewListForm);
     document.getElementById("newListForm").addEventListener("submit", addList);
+    bindButton("taskNew", showNewTaskForm);
     document.getElementById("newTaskForm").addEventListener("submit", addTask);
+    bindButton("listDefault", Storage.createDefaultList, renderLists);
 
     todoLists.addEventListener("change", renderTable);
 
@@ -36,10 +35,15 @@ function bind() {
     }
 }
 
+function fakeButtonClick(buttonName) {
+    const button = document.getElementById(buttonName);
+    button.dispatchEvent(new Event("click"));
+}
+
 function renderLists() {
     clearUI();
 
-    // delete does not need to build anything, so bail
+    // if they hit the clear button, there is no data to render
     if (!Storage.currentUser) return;
 
     Storage.currentUser.lists.forEach((list, index) => {
@@ -48,33 +52,40 @@ function renderLists() {
         opt.label = list.name;
         todoLists.appendChild(opt);
     });
+}
 
-    function clearUI() {
-        rows.innerHTML = "";
-        tableHeading.innerHTML = "&nbsp;"; // keep screen from shifting
-        todoLists.selectedIndex = -1;
-        while (todoLists.firstChild)
-            todoLists.removeChild(todoLists.firstChild);
-    }
+function clearUI() {
+    rows.innerHTML = "";
+    tableHeading.innerHTML = "&nbsp;"; // keep screen from shifting
+    todoLists.selectedIndex = -1;
+    while (todoLists.firstChild) todoLists.removeChild(todoLists.firstChild);
 }
 
 // TODO: not sure dialog works for moble
 function showNewListForm() {
+    // edge case
+    // if user clears localStorage, then wants to create a new list, initialize with default user
+    if (!Storage.currentUser) {
+        Storage.createDefaultUser();
+    }
     newListName.value = "";
     newListDialog.showModal();
 }
 
+// this is a little odd, the show() and add() functions are a single logical operation,
+// but are broken up by submit event
 function addList() {
     const name = newListName.value.trim();
     if (name === "") return;
     Storage.currentUser.createList(name);
     renderLists();
-    // fake click on the new item, it will be last
+    // fake click on the new item to reset task table, it will be last
     todoLists.selectedIndex = todoLists.children.length - 1;
     todoLists.dispatchEvent(new Event("change"));
 }
 
 function showNewTaskForm() {
+    if (todoLists.selectedIndex === -1) return;
     newTaskName.value = "";
     newTaskDialog.showModal();
 }
@@ -90,14 +101,16 @@ function addTask() {
     renderTable();
 }
 
-function deletList() {
+function deletSelectedList() {
+    // TODO: this validation is necessary in serveral locations, it should be a
+    // function that throws, but i don't have any exception handling yet
     if (todoLists.selectedIndex === -1) return;
     // TODO: only works because i stuck the array index into the option value
     Storage.currentUser.deleteList(todoLists.value);
 }
 
 function renderTable() {
-    // TODO: thight coupling between data array and UI list
+    if (todoLists.selectedIndex === -1) return;
     const todoList = Storage.currentUser.lists[todoLists.selectedIndex];
     tableHeading.innerText = todoList.name;
     renderRows(todoList.items);
@@ -117,4 +130,4 @@ function renderRows(todoItems) {
     }
 }
 
-export { bind };
+export { bind, fakeButtonClick };
