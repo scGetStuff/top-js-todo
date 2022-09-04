@@ -16,10 +16,11 @@ just get basic lists and items working with just names, all ui elements, events,
 ### Requirements
 
 -   add priority, description, due date
--   add sorting; headers should be links that sort alternate asc/des
+-   add sorting; i would like to make headers as links that sort alternate asc/des
 
 ### Notes
 
+-   user has to hit the save button, i'm not make it automatic on every edit
 -   Personal preferance with ess6 modules, i hate the existance of defaults, i do not use them.
 -   JSON.stringify() only writes out public fields, kind of makes seralizing class with private fields a problem. i don't want to deal with other libraries for seralizing, just keeping it simpler and going all public.
 -   Namespace thing; I started with static methods, then switched back to regular functions.
@@ -31,6 +32,7 @@ just get basic lists and items working with just names, all ui elements, events,
 
 ### other features maybe add
 
--   add the ability to create a user
+-   rename todoList; some kind of inline in edit box would be nice; this became a real issue when i added the Default list for empty user
+-   maybe add the ability to create a user
 -   track create/edit date for list and item
 -   allow for rearanging lists/items
