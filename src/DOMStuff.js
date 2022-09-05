@@ -13,19 +13,20 @@ const newTaskDialog = document.getElementById("newTaskDialog");
 const newTaskDescription = document.getElementById("newTaskDescription");
 
 function bind() {
-    bindButton("storageLoad", Storage.loadUser, renderLists);
+    bindButton("storageLoad", Storage.loadUser, renderListNames);
     bindButton("storageSave", Storage.saveUser);
-    bindButton("storageDefault", Storage.createDefaultData, renderLists);
+    bindButton("storageDefault", Storage.createDefaultData, renderListNames);
     bindButton("storageClear", Storage.clear, clearUI);
-    bindButton("listDelete", deletSelectedList, renderLists);
 
     bindButton("listNew", showNewListForm);
     document.getElementById("newListForm").addEventListener("submit", addList);
+    bindButton("listDelete", deletSelectedList, renderListNames);
+    bindButton("listDefault", Storage.createDefaultList, renderListNames);
+
     bindButton("taskNew", showNewTaskForm);
     document.getElementById("newTaskForm").addEventListener("submit", addTask);
-    bindButton("listDefault", Storage.createDefaultList, renderLists);
 
-    todoLists.addEventListener("change", renderTable);
+    todoLists.addEventListener("change", renderItemTable);
 
     function bindButton(buttonID, action, render = null) {
         document.getElementById(buttonID).addEventListener("click", (event) => {
@@ -40,7 +41,7 @@ function fakeButtonClick(buttonName) {
     button.dispatchEvent(new Event("click"));
 }
 
-function renderLists() {
+function renderListNames() {
     clearUI();
 
     // if they hit the clear button, there is no data to render
@@ -63,11 +64,9 @@ function clearUI() {
 
 // TODO: not sure dialog works for moble
 function showNewListForm() {
-    // edge case
-    // if user clears localStorage, then wants to create a new list, initialize with default user
-    if (!Storage.currentUser) {
-        Storage.createDefaultUser();
-    }
+    // edge case - user clears localStorage; then wants to create a new list; make an empty user first
+    if (!Storage.currentUser) Storage.createDefaultUser();
+
     newListName.value = "";
     newListDialog.showModal();
 }
@@ -78,7 +77,7 @@ function addList() {
     const name = newListName.value.trim();
     if (name === "") return;
     Storage.currentUser.createList(name);
-    renderLists();
+    renderListNames();
     // fake click on the new item to reset task table, it will be last
     todoLists.selectedIndex = todoLists.children.length - 1;
     todoLists.dispatchEvent(new Event("change"));
@@ -98,7 +97,7 @@ function addTask() {
         .createItem(name);
     todoItem.description = newTaskDescription.value.trim();
     console.log(todoItem.description);
-    renderTable();
+    renderItemTable();
 }
 
 function deletSelectedList() {
@@ -109,25 +108,66 @@ function deletSelectedList() {
     Storage.currentUser.deleteList(todoLists.value);
 }
 
-function renderTable() {
+function renderItemTable() {
     if (todoLists.selectedIndex === -1) return;
     const todoList = Storage.currentUser.lists[todoLists.selectedIndex];
     tableHeading.innerText = todoList.name;
-    renderRows(todoList.items);
+    renderItems(todoList);
 }
 
-function renderRows(todoItems) {
-    let html = "";
-    todoItems.forEach((todoItem) => {
-        html += createRow(todoItem);
+// TODO: i hate the way i am doing this with a table
+// every row is a grid layout, stupid, should be 1 layout with a bunch of spans/divs
+function renderItems(todoList) {
+    const todoItems = todoList.items;
+    rows.innerHTML = "";
+    todoItems.forEach((todoItem, index) => {
+        rows.appendChild(tr(todoList, todoItem, index));
     });
-    rows.innerHTML = html;
+}
 
-    function createRow(todoItem) {
-        // TODO: first pass dummy data
-        // TODO: still not sure innerHTML is good/bad; it is less code than stupid DOM crap
-        return `<tr><td>${todoItem.isDone}</td><td>${todoItem.name}</td><td>${todoItem.description}</td><td>X</td></tr>`;
-    }
+function tr(todoList, todoItem, index) {
+    const tr = document.createElement("tr");
+    tr.appendChild(tdCheck(todoItem));
+    tr.appendChild(td(todoItem.name));
+    tr.appendChild(td(todoItem.description));
+    tr.appendChild(tdDelete(todoList, index));
+    return tr;
+}
+
+function td(value) {
+    const td = document.createElement("td");
+    td.innerText = value;
+    return td;
+}
+
+// TODO: trying to bind UI to data model without a bunch of stupid data attributes
+// wind up needing a referance to the list object from cells in the items
+// because, i'm tring to keep list manipulation controled by the container class
+// at some point i do wnat the classes to mage their state properly; its the seralization thing
+function tdCheck(todoItem) {
+    const td = document.createElement("td");
+    const check = document.createElement("input");
+    check.addEventListener("change", () => {
+        todoItem.isDone = !todoItem.isDone;
+    });
+    check.type = "checkbox";
+    check.checked = todoItem.isDone;
+    td.appendChild(check);
+    return td;
+}
+
+function tdDelete(todoList, index) {
+    const td = document.createElement("td");
+    const button = document.createElement("button");
+    button.addEventListener("click", () => {
+        todoList.deleteItem(index);
+        renderItemTable();
+    });
+    button.type = "button";
+    button.classList.add("delete");
+    button.textContent = "X";
+    td.appendChild(button);
+    return td;
 }
 
 export { bind, fakeButtonClick };
