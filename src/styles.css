@@ -176,3 +176,17 @@ th {
     align-self: center;
     width: 50%;
 }
+
+.delete {
+    color: black;
+    font-weight: bold;
+    font-size: large;
+    font-stretch: extra-expanded;
+    padding: 0 0.25rem;
+    background-color: crimson;
+}
+
+.delete:hover {
+    background-color: greenyellow;
+    transition: 0.5s;
+}
