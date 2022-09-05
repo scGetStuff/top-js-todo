@@ -26,8 +26,8 @@
 
                 <fieldset class="group">
                     <legend>localStorage functions</legend>
-                    <button type="button" id="storageLoad">Load</button>
                     <button type="button" id="storageSave">Save</button>
+                    <button type="button" id="storageLoad">Load</button>
                     <button type="button" id="storageClear">Clear</button>
                     <button type="button" id="storageDefault">Test Data</button>
                 </fieldset>
@@ -78,13 +78,14 @@
         <dialog class="new-list-dialog" id="newListDialog">
             <div class="dialog-content">
                 <h2>New List Dialog</h2>
-                <form method="dialog" id="newListForm">
+                <form method="dialog" id="newListForm" autocomplete="off">
                     <div class="field">
                         <label for="newListName">Name:</label>
                         <input
                             type="text"
                             id="newListName"
                             name="newListName"
+                            
                         />
                     </div>
                     <button class="ok">OK</button>
@@ -95,7 +96,7 @@
         <dialog class="new-task-dialog" id="newTaskDialog">
             <div class="dialog-content">
                 <h2>New Task Dialog</h2>
-                <form method="dialog" id="newTaskForm">
+                <form method="dialog" id="newTaskForm" autocomplete="off">
                     <div class="field">
                         <label for="newTaskName">Name:</label>
                         <input
