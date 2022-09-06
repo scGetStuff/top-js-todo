@@ -2,37 +2,25 @@
 
 The Odin Project, Full Stack JavaScript Path, JavaScript, Organizing your JavaScript Code, Project: Todo List
 
-### Initial functionality
-
-just get basic lists and items working with just names, all ui elements, events, modules defiend and working; then add other fields and features
-
--   starting with single todoList containing some mock todoItems
--   read/write set of lists to localstorage
--   no intention of using date-fns at start, more practice doing things with straight js
--   using class for object creation
--   i'm using null for optional field initial values, my thinking being undefined is default state, null is my value so i get different errors
--   starting with arrays, will need to change to a map for priority and sorting
-
 ### Requirements
-
--   add priority, description, due date
--   add sorting; i would like to make headers as links that sort alternate asc/des
+-   add sorting; I would like to make headers as links that sort alternate asc/des
 
 ### Notes
-
--   user has to hit the save button, i'm not make it automatic on every edit
--   Personal preferance with ess6 modules, i hate the existance of defaults, i do not use them.
--   JSON.stringify() only writes out public fields, kind of makes seralizing class with private fields a problem. i don't want to deal with other libraries for seralizing, just keeping it simpler and going all public.
+-   I screwed up reading the spec "choose which project their todos go into".  Spec wants a pile of todos that you assign to lists.  My brain wants you to define a list then add todos to it; every project I looked at did it this way; none of them let you move an item from one place to another. I'm not changing at this time.
+-   user has to hit the save button, it is not automatic on every edit
+-   Personal preference with ess6 modules, I hate the existence of defaults, I do not use them.
+-   JSON.stringify() only writes out public fields, kind of makes serializing class with private fields a problem. I have to figure out how I want to deal wiht it, just keeping it simpler and going all public for now.
 -   Namespace thing; I started with static methods, then switched back to regular functions.
-    ```js
+```js
     // my prefered aproach is to always qualify code from other modules
     import * as DOMStuff from "./DOMStuff";
     DOMStuff.bind();
-    ```
+```
 
 ### other features maybe add
-
--   rename todoList; some kind of inline in edit box would be nice; this became a real issue when i added the Default list for empty user
--   maybe add the ability to create a user
--   track create/edit date for list and item
--   allow for rearanging lists/items
+-   something in the UI to rename lists/tasks and edit description
+-   add the ability to create users
+-   allow for manual rearranging lists/items; aside from the sort
+-   a done/checked task should be excluded from sort, push to bottom and gray cross-through
+-   date input validations, range: min today max ?
+-   fix alignment problem with description resizing things. get rid of the table, just use 1 grid template and divs; first pass is each <tr> is a grid.

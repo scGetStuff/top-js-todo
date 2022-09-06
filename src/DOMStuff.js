@@ -6,10 +6,14 @@ import { TodoItem } from "./TodoItem";
 const todoLists = document.getElementById("todoLists");
 const rows = document.getElementById("rows");
 const tableHeading = document.getElementById("tableHeading");
-const newListName = document.getElementById("newListName");
+
 const newListDialog = document.getElementById("newListDialog");
-const newTaskName = document.getElementById("newTaskName");
+const newListName = document.getElementById("newListName");
+
 const newTaskDialog = document.getElementById("newTaskDialog");
+const newTaskName = document.getElementById("newTaskName");
+const newTaskPriority = document.getElementById("newTaskPriority");
+const newTaskDueDate = document.getElementById("newTaskDueDate");
 const newTaskDescription = document.getElementById("newTaskDescription");
 
 function bind() {
@@ -43,9 +47,6 @@ function fakeButtonClick(buttonName) {
 
 function renderListNames() {
     clearUI();
-
-    // if they hit the clear button, there is no data to render
-    if (!Storage.currentUser) return;
 
     Storage.currentUser.lists.forEach((list, index) => {
         const opt = document.createElement("option");
@@ -86,6 +87,9 @@ function addList() {
 function showNewTaskForm() {
     if (todoLists.selectedIndex === -1) return;
     newTaskName.value = "";
+    newTaskPriority.value = 1;
+    newTaskDueDate.value = new Date(Date());
+    newTaskDescription.value = "";
     newTaskDialog.showModal();
 }
 
@@ -95,8 +99,9 @@ function addTask() {
     const todoItem = Storage.currentUser
         .getList(todoLists.selectedIndex)
         .createItem(name);
+    todoItem.priority = newTaskPriority.value;
+    todoItem.dueDate = newTaskDueDate.value;
     todoItem.description = newTaskDescription.value.trim();
-    console.log(todoItem.description);
     renderItemTable();
 }
 
@@ -115,6 +120,7 @@ function renderItemTable() {
     renderItems(todoList);
 }
 
+// TODO: this should probably all be some component modules
 // TODO: i hate the way i am doing this with a table
 // every row is a grid layout, stupid, should be 1 layout with a bunch of spans/divs
 function renderItems(todoList) {
@@ -123,51 +129,74 @@ function renderItems(todoList) {
     todoItems.forEach((todoItem, index) => {
         rows.appendChild(tr(todoList, todoItem, index));
     });
-}
 
-function tr(todoList, todoItem, index) {
-    const tr = document.createElement("tr");
-    tr.appendChild(tdCheck(todoItem));
-    tr.appendChild(td(todoItem.name));
-    tr.appendChild(td(todoItem.description));
-    tr.appendChild(tdDelete(todoList, index));
-    return tr;
-}
+    function tr(todoList, todoItem, index) {
+        const tr = document.createElement("tr");
+        tr.appendChild(td(check(todoItem)));
+        tr.appendChild(td(span(todoItem.name)));
+        tr.appendChild(td(priority(todoItem)));
+        tr.appendChild(td(date(todoItem)));
+        tr.appendChild(td(span(todoItem.description)));
+        tr.appendChild(td(deleteButton(todoList, index)));
+        return tr;
+    }
 
-function td(value) {
-    const td = document.createElement("td");
-    td.innerText = value;
-    return td;
-}
+    function td(child) {
+        const td = document.createElement("td");
+        td.appendChild(child);
+        return td;
+    }
 
-// TODO: trying to bind UI to data model without a bunch of stupid data attributes
-// wind up needing a referance to the list object from cells in the items
-// because, i'm tring to keep list manipulation controled by the container class
-// at some point i do wnat the classes to mage their state properly; its the seralization thing
-function tdCheck(todoItem) {
-    const td = document.createElement("td");
-    const check = document.createElement("input");
-    check.addEventListener("change", () => {
-        todoItem.isDone = !todoItem.isDone;
-    });
-    check.type = "checkbox";
-    check.checked = todoItem.isDone;
-    td.appendChild(check);
-    return td;
-}
+    function span(value) {
+        const span = document.createElement("span");
+        span.innerText = value;
+        return span;
+    }
 
-function tdDelete(todoList, index) {
-    const td = document.createElement("td");
-    const button = document.createElement("button");
-    button.addEventListener("click", () => {
-        todoList.deleteItem(index);
-        renderItemTable();
-    });
-    button.type = "button";
-    button.classList.add("delete");
-    button.textContent = "X";
-    td.appendChild(button);
-    return td;
+    function check(todoItem) {
+        const check = document.createElement("input");
+        check.addEventListener("change", () => {
+            todoItem.isDone = !todoItem.isDone;
+        });
+        check.type = "checkbox";
+        check.checked = todoItem.isDone;
+        return check;
+    }
+
+    function priority(todoItem) {
+        const input = document.createElement("input");
+        input.addEventListener("change", (event) => {
+            todoItem.priority = event.target.value;
+        });
+        input.type = "number";
+        input.classList.add("priority");
+        input.value = todoItem.priority;
+        input.min = 1; // TODO: should be style for this and dialog
+        input.max = 9;
+        return input;
+    }
+
+    function date(todoItem) {
+        const date = document.createElement("input");
+        date.addEventListener("change", (event) => {
+            todoItem.dueDate = event.target.value;
+        });
+        date.type = "date";
+        date.value = todoItem.dueDate;
+        return date;
+    }
+
+    function deleteButton(todoList, index) {
+        const button = document.createElement("button");
+        button.addEventListener("click", () => {
+            todoList.deleteItem(index);
+            renderItemTable();
+        });
+        button.type = "button";
+        button.classList.add("delete");
+        button.textContent = "X";
+        return button;
+    }
 }
 
 export { bind, fakeButtonClick };

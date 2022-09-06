@@ -130,7 +130,7 @@ tbody tr:nth-child(odd) {
 
 tr {
     display: grid;
-    grid-template-columns: 2rem 15rem auto 2rem;
+    grid-template-columns: 2rem 10rem 3rem 10rem auto 2rem;
 }
 
 td,
@@ -138,6 +138,7 @@ th {
     border: 1px solid black;
     text-align: center;
     padding: 0.5rem;
+    overflow: hidden;
 }
 
 .new-list-dialog,
@@ -164,6 +165,11 @@ th {
     gap: 1rem;
 }
 
+.dialog-content input,
+.dialog-content textarea {
+    width: 45ch;
+}
+
 .field {
     display: flex;
     justify-content: flex-end;
@@ -175,6 +181,10 @@ th {
     margin-top: 1rem;
     align-self: center;
     width: 50%;
+}
+
+.priority {
+    width: 100%;
 }
 
 .delete {

@@ -34,22 +34,6 @@
             </div>
             <div class="right">
                 <h2>Tasks Table</h2>
-                <p>for each row:</p>
-                <ul>
-                    <li>
-                        description should link to a modal with the full
-                        description to read/edit
-                    </li>
-                    <li>
-                        check box for disable/mark done, set a flag to exclude
-                        from sort
-                    </li>
-                    <li>delet use red X button to delete the task</li>
-                    <li>
-                        should probably have add task button on the table side,
-                        not on the left
-                    </li>
-                </ul>
                 <div class="flex-row">
                     <table>
                         <caption id="tableHeading">
@@ -59,6 +43,8 @@
                             <tr>
                                 <th></th>
                                 <th>Name</th>
+                                <th></th>
+                                <th>Due Date</th>
                                 <th>Description</th>
                                 <th></th>
                             </tr>
@@ -85,7 +71,8 @@
                             type="text"
                             id="newListName"
                             name="newListName"
-                            
+                            maxlength="16"
+                            autofocus
                         />
                     </div>
                     <button class="ok">OK</button>
@@ -103,6 +90,27 @@
                             type="text"
                             id="newTaskName"
                             name="newTaskName"
+                            maxlength="16"
+                            autofocus
+                        />
+                    </div>
+                    <div class="field">
+                        <label for="newTaskPriority">Priority:</label>
+                        <input
+                            type="number"
+                            id="newTaskPriority"
+                            name="newTaskPriority"
+                            min="1"
+                            max="9"
+                            width="2rem"
+                        />
+                    </div>
+                    <div class="field">
+                        <label for="newTaskDueDate">Name:</label>
+                        <input
+                            type="date"
+                            id="newTaskDueDate"
+                            name="newTaskDueDate"
                         />
                     </div>
                     <div class="field">
@@ -111,7 +119,7 @@
                             id="newTaskDescription"
                             name="newTaskDescription"
                             rows="5"
-                            cols="45"
+                            maxlength="256"
                         ></textarea>
                     </div>
                     <button class="ok">OK</button>
