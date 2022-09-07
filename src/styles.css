@@ -35,7 +35,7 @@ body {
 } */
 
 main {
-    flex-grow: 1;
+    flex: 1;
     display: flex;
     justify-content: flex-start;
 }
@@ -106,22 +106,18 @@ ul {
     margin-left: 1rem;
 }
 
-.flex-row {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-}
-
 table {
     border-collapse: collapse;
     flex: 1;
 }
 
-caption {
-    text-align: center;
+.caption {
     padding: 0.5rem;
-    font-size: larger;
+    font-size: x-large;
     font-weight: bold;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: start;
 }
 
 tbody tr:nth-child(odd) {
