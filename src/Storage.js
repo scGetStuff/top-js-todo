@@ -69,8 +69,9 @@ class Storage {
             list.items.forEach((item) => {
                 const todoItem = todoList.createItem(item.name);
                 todoItem.isDone = item.isDone;
-                todoItem.description = item.description;
                 todoItem.priority = item.priority;
+                todoItem.dueDate = item.dueDate;
+                todoItem.description = item.description;
             });
         });
 
