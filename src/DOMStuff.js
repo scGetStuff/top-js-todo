@@ -1,7 +1,8 @@
-import { Storage } from "./Storage";
+import * as Storage from "./storage";
 import { User } from "./User";
 import { TodoList } from "./TodoList";
 import { TodoItem } from "./TodoItem";
+import * as Data from "./data";
 
 const todoLists = document.getElementById("todoLists");
 const rows = document.getElementById("rows");
@@ -17,15 +18,15 @@ const newTaskDueDate = document.getElementById("newTaskDueDate");
 const newTaskDescription = document.getElementById("newTaskDescription");
 
 function bind() {
-    bindButton("storageLoad", Storage.loadUser, renderListNames);
-    bindButton("storageSave", Storage.saveUser);
-    bindButton("storageDefault", Storage.createDefaultData, renderListNames);
-    bindButton("storageClear", Storage.clear, clearUI);
+    bindButton("storageLoad", Data.loadUser, renderListNames);
+    bindButton("storageSave", Data.saveUser);
+    bindButton("storageDefault", Data.createTestData, renderListNames);
+    bindButton("storageClear", storageClearEvent, clearUI);
 
     bindButton("listNew", showNewListForm);
     document.getElementById("newListForm").addEventListener("submit", addList);
     bindButton("listDelete", deletSelectedList, renderListNames);
-    bindButton("listDefault", Storage.createDefaultList, renderListNames);
+    bindButton("listDefault", Data.createDefaultList, renderListNames);
 
     bindButton("taskNew", showNewTaskForm);
     document.getElementById("newTaskForm").addEventListener("submit", addTask);
@@ -48,7 +49,7 @@ function fakeButtonClick(buttonName) {
 function renderListNames() {
     clearUI();
 
-    Storage.currentUser.lists.forEach((list, index) => {
+    Data.currentUser.lists.forEach((list, index) => {
         const opt = document.createElement("option");
         opt.value = index;
         opt.label = list.name;
@@ -63,10 +64,14 @@ function clearUI() {
     while (todoLists.firstChild) todoLists.removeChild(todoLists.firstChild);
 }
 
-// TODO: not sure dialog works for moble
+function storageClearEvent() {
+    Storage.clear();
+    Data.currentUser = null;
+}
+
 function showNewListForm() {
     // edge case - user clears localStorage; then wants to create a new list; make an empty user first
-    if (!Storage.currentUser) Storage.createDefaultUser();
+    if (!Data.currentUser) Data.createDefaultUser();
 
     newListName.value = "";
     newListDialog.showModal();
@@ -77,7 +82,7 @@ function showNewListForm() {
 function addList() {
     const name = newListName.value.trim();
     if (name === "") return;
-    Storage.currentUser.createList(name);
+    Data.currentUser.createList(name);
     renderListNames();
     // fake click on the new item to reset task table, it will be last
     todoLists.selectedIndex = todoLists.children.length - 1;
@@ -96,7 +101,7 @@ function showNewTaskForm() {
 function addTask() {
     const name = newTaskName.value.trim();
     if (name === "") return;
-    const todoItem = Storage.currentUser
+    const todoItem = Data.currentUser
         .getList(todoLists.selectedIndex)
         .createItem(name);
     todoItem.priority = newTaskPriority.value;
@@ -110,12 +115,12 @@ function deletSelectedList() {
     // function that throws, but i don't have any exception handling yet
     if (todoLists.selectedIndex === -1) return;
     // TODO: only works because i stuck the array index into the option value
-    Storage.currentUser.deleteList(todoLists.value);
+    Data.currentUser.deleteList(todoLists.value);
 }
 
 function renderItemTable() {
     if (todoLists.selectedIndex === -1) return;
-    const todoList = Storage.currentUser.lists[todoLists.selectedIndex];
+    const todoList = Data.currentUser.lists[todoLists.selectedIndex];
     tableHeading.innerText = todoList.name;
     renderItems(todoList);
 }
