@@ -30,10 +30,6 @@ body {
     flex-direction: column;
 }
 
-/* body * {
-    outline: 1px solid black;
-} */
-
 main {
     flex: 1;
     display: flex;
@@ -100,10 +96,6 @@ option {
 
 .right {
     flex: 1 1 auto;
-}
-
-ul {
-    margin-left: 1rem;
 }
 
 table {

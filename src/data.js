@@ -60,4 +60,11 @@ function saveUser() {
     Storage.save(currentUser);
 }
 
-export { currentUser, loadUser, saveUser, createDefaultUser, createDefaultList, createTestData };
+export {
+    currentUser,
+    loadUser,
+    saveUser,
+    createDefaultUser,
+    createDefaultList,
+    createTestData,
+};

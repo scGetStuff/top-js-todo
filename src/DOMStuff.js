@@ -1,7 +1,4 @@
 import * as Storage from "./storage";
-import { User } from "./User";
-import { TodoList } from "./TodoList";
-import { TodoItem } from "./TodoItem";
 import * as Data from "./data";
 
 const todoLists = document.getElementById("todoLists");
@@ -84,6 +81,7 @@ function addList() {
     if (name === "") return;
     Data.currentUser.createList(name);
     renderListNames();
+
     // fake click on the new item to reset task table, it will be last
     todoLists.selectedIndex = todoLists.children.length - 1;
     todoLists.dispatchEvent(new Event("change"));
@@ -111,10 +109,7 @@ function addTask() {
 }
 
 function deletSelectedList() {
-    // TODO: this validation is necessary in serveral locations, it should be a
-    // function that throws, but i don't have any exception handling yet
     if (todoLists.selectedIndex === -1) return;
-    // TODO: only works because i stuck the array index into the option value
     Data.currentUser.deleteList(todoLists.value);
 }
 
@@ -135,6 +130,7 @@ function renderItems(todoList) {
         rows.appendChild(tr(todoList, todoItem, index));
     });
 
+    // TODO: all this crap should be done with <template>
     function tr(todoList, todoItem, index) {
         const tr = document.createElement("tr");
         tr.appendChild(td(check(todoItem)));
@@ -176,7 +172,7 @@ function renderItems(todoList) {
         input.type = "number";
         input.classList.add("priority");
         input.value = todoItem.priority;
-        input.min = 1; // TODO: should be style for this and dialog
+        input.min = 1; // TODO: same bounds here and dialog; should be a better way, avoid duplicate
         input.max = 9;
         return input;
     }
